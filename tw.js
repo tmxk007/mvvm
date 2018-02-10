@@ -21,7 +21,7 @@
     }
 
     var subId = 0;
-    
+
     // 订阅者
     function Subscriber(vm, node, fieldName, attrName) {
         Publisher.target = this;
@@ -102,7 +102,7 @@
     }
 
     // 正则匹配指令({{ text }})
-    var reg = new RegExp(/\{\{(.*?)\}\}/g);
+    var reg = new RegExp(/\$\[(.*?)\]/g);
 
     function compile(node, vm) {
         // 匹配节点元素
@@ -139,7 +139,8 @@
             var attrName = attr.nodeName;
             // 字段名
             var fieldName = attr.nodeValue;
-            if (attrName == 'v-model') {
+            if (fieldName.indexOf('$:[') == 0) {
+                fieldName = fieldName.substring(3, fieldName.length - 1);
                 node.addEventListener('input', function (e) {
                     // 给相应的data属性赋值，并触发该属性的set方法
                     vm[fieldName] = e.target.value;
@@ -148,11 +149,11 @@
                 node.value = vm.data[fieldName];
                 node.removeAttribute(attrName);
             }
-            else if (attrName.indexOf(':') == 0) {
-                attrName = attrName.substring(1);
+            else if (fieldName.indexOf('$[') == 0) {
+                fieldName = fieldName.substring(2, fieldName.length - 1);
                 // 将data值赋值给node
                 node.setAttribute(attrName, vm.data[fieldName]);
-                node.removeAttribute(attr.nodeName);
+                // node.removeAttribute(attr.nodeName);
                 new Subscriber(vm, node, fieldName, attrName);
             }
         });
