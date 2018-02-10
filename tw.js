@@ -102,7 +102,7 @@
     }
 
     // 正则匹配指令({{ text }})
-    var reg = new RegExp(/\$\[(.*?)\]/g);
+    var reg = new RegExp(/\$\{(.*?)\}/g);
 
     function compile(node, vm) {
         // 匹配节点元素
@@ -139,7 +139,7 @@
             var attrName = attr.nodeName;
             // 字段名
             var fieldName = attr.nodeValue;
-            if (fieldName.indexOf('$:[') == 0) {
+            if (fieldName.indexOf('$:{') == 0) {
                 fieldName = fieldName.substring(3, fieldName.length - 1);
                 node.addEventListener('input', function (e) {
                     // 给相应的data属性赋值，并触发该属性的set方法
@@ -149,7 +149,7 @@
                 node.value = vm.data[fieldName];
                 node.removeAttribute(attrName);
             }
-            else if (fieldName.indexOf('$[') == 0) {
+            else if (fieldName.indexOf('${') == 0) {
                 fieldName = fieldName.substring(2, fieldName.length - 1);
                 // 将data值赋值给node
                 node.setAttribute(attrName, vm.data[fieldName]);
