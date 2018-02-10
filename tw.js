@@ -43,7 +43,7 @@
         }
     }
 
-    function mvvm(options) {
+    function tw(options) {
         var that = this;
         that.data = options.data;
         var data = that.data;
@@ -158,6 +158,6 @@
         });
     }
 
-    window.$mvvm = mvvm;
+    window.$tw = tw;
 
 })(window);
